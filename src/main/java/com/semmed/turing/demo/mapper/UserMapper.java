@@ -16,7 +16,7 @@ public class UserMapper {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getStatus().name().toUpperCase()
+                user.getStatus()
         );
     }
 
@@ -34,7 +34,7 @@ public class UserMapper {
                 .username(request.username())
                 .email(request.email())
                 .password(request.password())
-                .status(UserStatus.valueOf(request.status().toUpperCase()))
+                .status(request.status())
                 .build();
     }
 }
