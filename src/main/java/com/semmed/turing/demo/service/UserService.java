@@ -9,6 +9,7 @@ import com.semmed.turing.demo.mapper.UserMapper;
 import com.semmed.turing.demo.model.dto.CreateUserRequest;
 import com.semmed.turing.demo.model.dto.UpdateUserRequest;
 import com.semmed.turing.demo.model.dto.UserDto;
+import com.semmed.turing.demo.model.enums.UserField;
 import com.semmed.turing.demo.model.enums.UserStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,11 +45,13 @@ public class UserService {
             throw new AlreadyExistsException("User with this username already exists");
         }
 
-        return mapper.toUserDto(repo.save(mapper.toEntity(request)));
+        UserEntity createdUser = repo.save(mapper.toEntity(request));
+
+        return mapper.toUserDto(createdUser);
     }
 
     public UserDto update(long id, UpdateUserRequest request) {
-        throwIfUserNotExists(id);
+        checkUserExistence(id);
 
         UserEntity entity = mapper.toEntity(request);
         entity.setId(id);
@@ -64,18 +67,18 @@ public class UserService {
             throw new InvalidInputException("Same status cannot be sent");
         }
 
-        UserEntity updatedUser = repo.updateField(id, "status", status.name());
+        UserEntity updatedUser = repo.updateField(id, UserField.STATUS, status.name());
 
         return mapper.toUserDto(updatedUser);
     }
 
     public void deleteById(long id) {
-        throwIfUserNotExists(id);
+        checkUserExistence(id);
 
         repo.softDeleteById(id);
     }
 
-    private void throwIfUserNotExists(long id) {
+    private void checkUserExistence(long id) {
         if (!repo.existsById(id)) {
             throw new NotFoundException("User with specified id not found");
         }

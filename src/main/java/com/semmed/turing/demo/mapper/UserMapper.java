@@ -5,12 +5,13 @@ import com.semmed.turing.demo.model.dto.CreateUserRequest;
 import com.semmed.turing.demo.model.dto.UpdateUserRequest;
 import com.semmed.turing.demo.model.dto.UserDto;
 import com.semmed.turing.demo.model.enums.UserStatus;
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
 
-    public UserDto toUserDto(UserEntity user) {
+    public UserDto toUserDto(@NonNull UserEntity user) {
         return new UserDto(
                 user.getId(),
                 user.getUsername(),
@@ -19,7 +20,7 @@ public class UserMapper {
         );
     }
 
-    public UserEntity toEntity(CreateUserRequest request) {
+    public UserEntity toEntity(@NonNull CreateUserRequest request) {
         return UserEntity.builder()
                 .username(request.username())
                 .email(request.email())
@@ -28,7 +29,7 @@ public class UserMapper {
                 .build();
     }
 
-    public UserEntity toEntity(UpdateUserRequest request) {
+    public UserEntity toEntity(@NonNull UpdateUserRequest request) {
         return UserEntity.builder()
                 .username(request.username())
                 .email(request.email())
