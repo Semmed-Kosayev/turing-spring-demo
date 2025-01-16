@@ -6,21 +6,5 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record UserDto(
-
-        @NotNull
-        Long id,
-
-        @NotBlank
-        @Size(max = 60)
-        String username,
-
-        @Email
-        @NotBlank
-        @Size(max = 100)
-        String email,
-
-        @NotNull
-        UserStatus status
-) {
+public record UserDto(Long id, String username, String email, UserStatus status) {
 }

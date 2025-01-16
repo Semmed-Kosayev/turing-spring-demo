@@ -29,14 +29,14 @@ public class UserService {
                 .toList();
     }
 
-    public UserDto findById(long id) {
+    public UserDto findById(final long id) {
         UserEntity user = repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("User entity with specified id not found."));
 
         return mapper.toUserDto(user);
     }
 
-    public UserDto create(CreateUserRequest request) {
+    public UserDto create(final CreateUserRequest request) {
         if (repo.existsByEmail(request.email())) {
             throw new AlreadyExistsException("User with this email already exists");
         }
@@ -50,16 +50,19 @@ public class UserService {
         return mapper.toUserDto(createdUser);
     }
 
-    public UserDto update(long id, UpdateUserRequest request) {
-        checkUserExistence(id);
+    public UserDto update(final long id, final UpdateUserRequest request) {
+        UserEntity user = repo.findById(id)
+                .orElseThrow(() -> new NotFoundException("User entity with specified id not found."));
 
-        UserEntity entity = mapper.toEntity(request);
-        entity.setId(id);
+        user.setUsername(request.username());
+        user.setEmail(request.email());
+        user.setPassword(request.password());
+        user.setStatus(request.status());
 
-        return mapper.toUserDto(repo.save(entity));
+        return mapper.toUserDto(repo.save(user));
     }
 
-    public UserDto updateStatus(long id, UserStatus status) {
+    public UserDto updateStatus(final long id, final UserStatus status) {
         UserStatus userStatus = repo.findById(id)
                 .map(UserEntity::getStatus)
                 .orElseThrow(() -> new NotFoundException("User with specified id not found"));
@@ -72,13 +75,13 @@ public class UserService {
         return mapper.toUserDto(updatedUser);
     }
 
-    public void deleteById(long id) {
+    public void deleteById(final long id) {
         checkUserExistence(id);
 
         repo.softDeleteById(id);
     }
 
-    private void checkUserExistence(long id) {
+    private void checkUserExistence(final long id) {
         if (!repo.existsById(id)) {
             throw new NotFoundException("User with specified id not found");
         }

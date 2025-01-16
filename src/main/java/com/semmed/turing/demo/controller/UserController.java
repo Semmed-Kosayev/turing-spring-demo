@@ -1,7 +1,7 @@
 package com.semmed.turing.demo.controller;
 
 import com.semmed.turing.demo.model.dto.CreateUserRequest;
-import com.semmed.turing.demo.model.dto.StatusRequest;
+import com.semmed.turing.demo.model.dto.UpdateStatusRequest;
 import com.semmed.turing.demo.model.dto.UpdateUserRequest;
 import com.semmed.turing.demo.model.dto.UserDto;
 import com.semmed.turing.demo.service.UserService;
@@ -45,19 +45,15 @@ public class UserController {
             @Min(1) @PathVariable long id,
             @Valid @RequestBody UpdateUserRequest request
     ) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(service.update(id, request));
+        return ResponseEntity.ok(service.update(id, request));
     }
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<UserDto> updateStatus(
             @Min(1) @PathVariable long id,
-            @Valid @RequestBody StatusRequest request
+            @Valid @RequestBody UpdateStatusRequest request
     ) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(service.updateStatus(id, request.status()));
+        return ResponseEntity.ok(service.updateStatus(id, request.status()));
     }
 
     @DeleteMapping("/{id}")
