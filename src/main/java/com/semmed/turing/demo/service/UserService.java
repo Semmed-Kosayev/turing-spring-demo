@@ -52,7 +52,7 @@ public class UserService {
 
     public UserDto update(final long id, final UpdateUserRequest request) {
         UserEntity user = repo.findById(id)
-                .orElseThrow(() -> new NotFoundException("User entity with specified id not found."));
+                .orElseThrow(() -> new NotFoundException("User with specified id not found"));
 
         user.setUsername(request.username());
         user.setEmail(request.email());
