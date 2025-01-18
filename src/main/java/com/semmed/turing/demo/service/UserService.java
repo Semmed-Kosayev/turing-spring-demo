@@ -9,7 +9,6 @@ import com.semmed.turing.demo.mapper.UserMapper;
 import com.semmed.turing.demo.model.dto.CreateUserRequest;
 import com.semmed.turing.demo.model.dto.UpdateUserRequest;
 import com.semmed.turing.demo.model.dto.UserDto;
-import com.semmed.turing.demo.model.enums.UserField;
 import com.semmed.turing.demo.model.enums.UserStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,27 +62,25 @@ public class UserService {
     }
 
     public UserDto updateStatus(final long id, final UserStatus status) {
-        UserStatus userStatus = repo.findById(id)
-                .map(UserEntity::getStatus)
+        UserEntity user = repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with specified id not found"));
-        if (status.equals(userStatus)) {
+
+        if (status.equals(user.getStatus())) {
             throw new InvalidInputException("Same status cannot be sent");
         }
 
-        UserEntity updatedUser = repo.updateField(id, UserField.STATUS, status.name());
+        user.setStatus(status);
+        UserEntity updatedUser = repo.save(user);
 
         return mapper.toUserDto(updatedUser);
     }
 
     public void deleteById(final long id) {
-        checkUserExistence(id);
+        UserEntity user = repo.findById(id)
+                .orElseThrow(() -> new NotFoundException("User with specified id not found"));
 
-        repo.softDeleteById(id);
-    }
+        user.setStatus(UserStatus.DELETED);
 
-    private void checkUserExistence(final long id) {
-        if (!repo.existsById(id)) {
-            throw new NotFoundException("User with specified id not found");
-        }
+        repo.save(user);
     }
 }
