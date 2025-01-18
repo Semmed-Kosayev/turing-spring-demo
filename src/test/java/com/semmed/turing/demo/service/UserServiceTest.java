@@ -9,7 +9,6 @@ import com.semmed.turing.demo.exception.NotFoundException;
 import com.semmed.turing.demo.mapper.UserMapper;
 import com.semmed.turing.demo.model.dto.CreateUserRequest;
 import com.semmed.turing.demo.model.dto.UserDto;
-import com.semmed.turing.demo.model.enums.UserField;
 import com.semmed.turing.demo.model.enums.UserStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +20,7 @@ import org.mockito.Spy;
 import java.util.List;
 import java.util.Optional;
 
+import static com.semmed.turing.demo.constant.TestConstant.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -47,23 +47,23 @@ class UserServiceTest {
 
     @Test
     void findAll_shouldReturnSuccess_whenRepositoryReturnsUsers() {
-        when(repo.findAll()).thenReturn(TestConstant.USER_LIST);
+        when(repo.findAll()).thenReturn(getUserList());
 
         List<UserDto> result = userService.findAll();
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals(TestConstant.USER_DTO_1, result.get(0));
-        assertEquals(TestConstant.USER_DTO_2, result.get(1));
+        assertEquals(getUserDto1(), result.get(0));
+        assertEquals(getUserDto2(), result.get(1));
 
         verify(repo, times(1)).findAll();
-        verify(mapper, times(1)).toUserDto(TestConstant.USER_1);
-        verify(mapper, times(1)).toUserDto(TestConstant.USER_2);
+        verify(mapper, times(1)).toUserDto(getUser1());
+        verify(mapper, times(1)).toUserDto(getUser2());
     }
 
     @Test
     void findAll_shouldReturnEmptyList_whenRepositoryReturnsEmptyList() {
-        when(repo.findAll()).thenReturn(TestConstant.EMPTY_USER_LIST);
+        when(repo.findAll()).thenReturn(getEmptyUserList());
 
         List<UserDto> result = userService.findAll();
 
@@ -74,7 +74,7 @@ class UserServiceTest {
 
     @Test
     void findAll_shouldHandleMultipleCalls() {
-        when(repo.findAll()).thenReturn(TestConstant.USER_LIST);
+        when(repo.findAll()).thenReturn(getUserList());
 
         List<UserDto> firstCall = userService.findAll();
         List<UserDto> secondCall = userService.findAll();
@@ -89,12 +89,12 @@ class UserServiceTest {
 
     @Test
     void findById_shouldReturnSuccess_WhenUserExists() {
-        when(repo.findById(1L)).thenReturn(Optional.of(TestConstant.USER_1));
+        when(repo.findById(1L)).thenReturn(Optional.of(getUser1()));
 
         UserDto result = userService.findById(1L);
 
         assertNotNull(result);
-        assertEquals(result, TestConstant.USER_DTO_1);
+        assertEquals(result, TestConstant.getUserDto1());
 
         verify(repo, times(1)).findById(1L);
     }
@@ -109,8 +109,8 @@ class UserServiceTest {
 
     @Test
     void create_shouldReturnSuccess() {
-        CreateUserRequest createUserRequest = TestConstant.CREATE_USER_REQUEST;
-        UserEntity createdUser = TestConstant.CREATED_USER;
+        CreateUserRequest createUserRequest = getCreateUserRequest();
+        UserEntity createdUser = getCreatedUser();
         when(repo.existsByEmail(createUserRequest.email())).thenReturn(false);
         when(repo.existsByUsername(createUserRequest.username())).thenReturn(false);
         when(repo.save(mapper.toEntity(createUserRequest))).thenReturn(createdUser);
@@ -118,12 +118,12 @@ class UserServiceTest {
         UserDto result = userService.create(createUserRequest);
 
         assertNotNull(result);
-        assertEquals(TestConstant.CREATED_USER_DTO, result);
+        assertEquals(TestConstant.getCreatedUserDto(), result);
     }
 
     @Test
     void create_shouldThrowAlreadyExistsException_whenEmailAlreadyExists() {
-        CreateUserRequest createUserRequest = TestConstant.CREATE_USER_REQUEST;
+        CreateUserRequest createUserRequest = TestConstant.getCreateUserRequest();
         when(repo.existsByEmail(createUserRequest.email())).thenReturn(true);
 
         AlreadyExistsException ex =
@@ -134,7 +134,7 @@ class UserServiceTest {
 
     @Test
     void create_shouldThrowAlreadyExistsException_whenUsernameAlreadyExists() {
-        CreateUserRequest createUserRequest = TestConstant.CREATE_USER_REQUEST;
+        CreateUserRequest createUserRequest = TestConstant.getCreateUserRequest();
         when(repo.existsByUsername(createUserRequest.username())).thenReturn(true);
 
         AlreadyExistsException ex =
@@ -145,14 +145,14 @@ class UserServiceTest {
 
     @Test
     void update_shouldReturnSuccess() {
-        UserEntity user3 = TestConstant.USER_3;
+        UserEntity user3 = getUser3();
         when(repo.findById(3L)).thenReturn(Optional.of(user3));
-        when(repo.save(user3)).thenReturn(TestConstant.UPDATE_USER_ENTITY);
+        when(repo.save(user3)).thenReturn(getUpdateUserEntity());
 
-        UserDto result = userService.update(3L, TestConstant.UPDATE_USER_REQUEST);
+        UserDto result = userService.update(3L, getUpdateUserRequest());
 
         assertNotNull(result);
-        assertEquals(TestConstant.UPDATE_USER_DTO, result);
+        assertEquals(getUpdateUserDto(), result);
     }
 
     @Test
@@ -160,19 +160,19 @@ class UserServiceTest {
         when(repo.findById(3L)).thenReturn(Optional.empty());
 
         NotFoundException ex = assertThrows(NotFoundException.class, () ->
-                userService.update(3L, TestConstant.UPDATE_USER_REQUEST));
+                userService.update(3L, getUpdateUserRequest()));
         assertEquals(ex.getMessage(), "User with specified id not found");
     }
 
     @Test
     void updateStatus_shouldReturnSuccess() {
-        when(repo.findById(3L)).thenReturn(Optional.of(TestConstant.getUser3()));
-        when(repo.save(TestConstant.getUser3Inactive())).thenReturn(TestConstant.getUser3Inactive());
+        when(repo.findById(3L)).thenReturn(Optional.of(getUser3()));
+        when(repo.save(getUser3Inactive())).thenReturn(getUser3Inactive());
 
         UserDto result = userService.updateStatus(3L, UserStatus.INACTIVE);
 
         assertNotNull(result);
-        assertEquals(TestConstant.getUser3DtoInactive(), result);
+        assertEquals(getUser3DtoInactive(), result);
     }
 
     @Test
@@ -186,7 +186,7 @@ class UserServiceTest {
 
     @Test
     void updateStatus_shouldThrowInvalidInputException_whenStatusIsTheSame() {
-        when(repo.findById(3L)).thenReturn(Optional.of(TestConstant.USER_3));
+        when(repo.findById(3L)).thenReturn(Optional.of(getUser3()));
 
         InvalidInputException ex =
                 assertThrows(InvalidInputException.class, () -> userService.updateStatus(3L, UserStatus.ACTIVE));

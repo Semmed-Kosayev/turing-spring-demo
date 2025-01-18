@@ -10,93 +10,125 @@ import com.semmed.turing.demo.model.enums.UserStatus;
 import java.util.List;
 
 public interface TestConstant {
-    UserEntity USER_1 = UserEntity.builder()
-            .id(1L)
-            .username("Semmed Kosayev")
-            .email("semmedkosayev@gmail.com")
-            .password("huuuuuuu32uh")
-            .status(UserStatus.ACTIVE)
-            .build();
 
-    UserEntity USER_2 = UserEntity.builder()
-            .id(2L)
-            .username("Elxan Nagiyev")
-            .email("elxannagiyev@gmail.com")
-            .password("elxnag123")
-            .status(UserStatus.ACTIVE)
-            .build();
+    static UserEntity getUser1() {
+        UserEntity user = new UserEntity();
 
-    UserEntity USER_3 = getUser3();
+        user.setId(1L);
+        user.setUsername("Semmed Kosayev");
+        user.setEmail("semmedkosayev@gmail.com");
+        user.setPassword("huuuuuuu32uh");
+        user.setStatus(UserStatus.ACTIVE);
 
-    UserDto USER_DTO_1 = new UserDto(
-            1L,
-            "Semmed Kosayev",
-            "semmedkosayev@gmail.com",
-            UserStatus.ACTIVE);
+        return user;
+    }
 
-    UserDto USER_DTO_2 = new UserDto(
-            2L,
-            "Elxan Nagiyev",
-            "elxannagiyev@gmail.com",
-            UserStatus.ACTIVE);
+    static UserEntity getUser2() {
+        UserEntity user = new UserEntity();
 
-    List<UserEntity> EMPTY_USER_LIST = List.of();
-    List<UserEntity> USER_LIST = List.of(USER_1, USER_2);
-    List<UserDto> USER_DTO_LIST = List.of(USER_DTO_1, USER_DTO_2);
+        user.setId(2L);
+        user.setUsername("Elxan Nagiyev");
+        user.setEmail("elxannagiyev@gmail.com");
+        user.setPassword("elxnag123");
+        user.setStatus(UserStatus.ACTIVE);
 
+        return user;
+    }
 
-    CreateUserRequest CREATE_USER_REQUEST = new CreateUserRequest(
-            "Aysun Memmedova",
-            "aysunmemmedova@gmail.com",
-            "aysova455"
-    );
-    UserEntity CREATED_USER = UserEntity.builder()
-            .id(3L)
-            .username("Aysun Memmedova")
-            .email("aysunmemmedova@gmail.com")
-            .password("aysova455")
-            .status(UserStatus.ACTIVE)
-            .build();
-    UserDto CREATED_USER_DTO = new UserDto(
-            3L,
-            "Aysun Memmedova",
-            "aysunmemmedova@gmail.com",
-            UserStatus.ACTIVE);
+    static UserDto getUserDto1() {
+        return new UserDto(
+                1L,
+                "Semmed Kosayev",
+                "semmedkosayev@gmail.com",
+                UserStatus.ACTIVE);
+    }
 
-    UpdateUserRequest UPDATE_USER_REQUEST = new UpdateUserRequest(
-            "Aysun Memmedova",
-            "aysunmemmedova@gmail.com",
-            "aysova456",
-            UserStatus.ACTIVE
-    );
-    UserEntity UPDATE_USER_ENTITY = UserEntity.builder()
-            .id(3L)
-            .username("Aysun Memmedova")
-            .email("aysunmemmedova@gmail.com")
-            .password("aysova456")
-            .status(UserStatus.ACTIVE)
-            .build();
-    UserDto UPDATE_USER_DTO = new UserDto(
-            3L,
-            "Aysun Memmedova",
-            "aysunmemmedova@gmail.com",
-            UserStatus.ACTIVE
-    );
-    UserEntity UPDATE_USER_ENTITY_INACTIVE = UserEntity.builder()
-            .id(3L)
-            .username("Aysun Memmedova")
-            .email("aysunmemmedova@gmail.com")
-            .password("aysova456")
-            .status(UserStatus.INACTIVE)
-            .build();
-    UserDto UPDATE_USER_DTO_INACTIVE = new UserDto(
-            3L,
-            "Aysun Memmedova",
-            "aysunmemmedova@gmail.com",
-            UserStatus.INACTIVE
-    );
+    static UserDto getUserDto2() {
+        return new UserDto(
+                2L,
+                "Elxan Nagiyev",
+                "elxannagiyev@gmail.com",
+                UserStatus.ACTIVE);
+    }
 
-    UserEntity USER_3_INACTIVE = getUser3Inactive();
+    static List<UserEntity> getEmptyUserList() {
+        return List.of();
+    }
+
+    static List<UserEntity> getUserList() {
+        return List.of(getUser1(), getUser2());
+    }
+
+    static List<UserDto> getUserDtoList() {
+        return List.of(getUserDto2(), getUserDto2());
+    }
+
+    static CreateUserRequest getCreateUserRequest() {
+        return new CreateUserRequest(
+                "Aysun Memmedova",
+                "aysunmemmedova@gmail.com",
+                "aysova455"
+        );
+    }
+
+    static UserEntity getCreatedUser() {
+        UserEntity user = new UserEntity();
+
+        user.setId(3L);
+        user.setUsername("Aysun Memmedova");
+        user.setEmail("aysunmemmedova@gmail.com");
+        user.setPassword("aysova455");
+        user.setStatus(UserStatus.ACTIVE);
+
+        return user;
+    }
+
+    static UserDto getCreatedUserDto() {
+        return new UserDto(
+                3L,
+                "Aysun Memmedova",
+                "aysunmemmedova@gmail.com",
+                UserStatus.ACTIVE);
+    }
+
+    static UpdateUserRequest getUpdateUserRequest() {
+        return new UpdateUserRequest(
+                "Aysun Memmedova",
+                "aysunmemmedova@gmail.com",
+                "aysova456",
+                UserStatus.ACTIVE
+        );
+    }
+
+    static UserEntity getUpdateUserEntity() {
+        UserEntity user = new UserEntity();
+
+        user.setId(3L);
+        user.setUsername("Aysun Memmedova");
+        user.setEmail("aysunmemmedova@gmail.com");
+        user.setPassword("aysova456");
+        user.setStatus(UserStatus.ACTIVE);
+
+        return user;
+    }
+
+    static UserDto getUpdateUserDto() {
+        return new UserDto(
+                3L,
+                "Aysun Memmedova",
+                "aysunmemmedova@gmail.com",
+                UserStatus.ACTIVE
+        );
+    }
+
+    static UserDto getUpdateUserDtoInactive() {
+        return new UserDto(
+                3L,
+                "Aysun Memmedova",
+                "aysunmemmedova@gmail.com",
+                UserStatus.INACTIVE
+        );
+    }
 
     static UserEntity getUser3Inactive() {
         UserEntity user = new UserEntity();
@@ -108,8 +140,6 @@ public interface TestConstant {
 
         return user;
     }
-
-    UserDto USER_DTO_3_INACTIVE = getUser3DtoInactive();
 
     static UserDto getUser3DtoInactive() {
         return new UserDto(
@@ -131,5 +161,7 @@ public interface TestConstant {
         return user;
     }
 
-    UpdateStatusRequest STATUS_REQUEST = new UpdateStatusRequest(UserStatus.INACTIVE);
+    static UpdateStatusRequest getStatusRequest() {
+        return new UpdateStatusRequest(UserStatus.INACTIVE);
+    }
 }
