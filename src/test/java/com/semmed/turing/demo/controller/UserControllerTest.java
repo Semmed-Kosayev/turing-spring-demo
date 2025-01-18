@@ -14,6 +14,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.semmed.turing.demo.constant.TestConstant.getCreateUserRequest;
+import static com.semmed.turing.demo.constant.TestConstant.getCreatedUserDto;
+import static com.semmed.turing.demo.constant.TestConstant.getStatusRequest;
+import static com.semmed.turing.demo.constant.TestConstant.getUpdateUserDto;
+import static com.semmed.turing.demo.constant.TestConstant.getUpdateUserDtoInactive;
+import static com.semmed.turing.demo.constant.TestConstant.getUpdateUserRequest;
+import static com.semmed.turing.demo.constant.TestConstant.getUserDto1;
+import static com.semmed.turing.demo.constant.TestConstant.getUserDtoList;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -39,20 +47,20 @@ class UserControllerTest {
     @Test
     void getAll_shouldReturnListOfUserDtos() throws Exception {
 
-        when(service.findAll()).thenReturn(TestConstant.USER_DTO_LIST);
+        when(service.findAll()).thenReturn(getUserDtoList());
 
         mockMvc.perform(get("/api/v1/users"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(TestConstant.USER_DTO_LIST)));
+                .andExpect(content().json(objectMapper.writeValueAsString(TestConstant.getUserDtoList())));
     }
 
     @Test
     void getById_shouldReturnUserDto_whenIdIsValid() throws Exception {
-        when(service.findById(1L)).thenReturn(TestConstant.USER_DTO_1);
+        when(service.findById(1L)).thenReturn(getUserDto1());
 
         mockMvc.perform(get("/api/v1/users/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(TestConstant.USER_DTO_1)));
+                .andExpect(content().json(objectMapper.writeValueAsString(getUserDto1())));
     }
 
     @Test
@@ -65,8 +73,8 @@ class UserControllerTest {
 
     @Test
     void create_shouldReturnCreatedUserDto_whenRequestIsValid() throws Exception {
-        CreateUserRequest request = TestConstant.CREATE_USER_REQUEST;
-        UserDto userDto = TestConstant.CREATED_USER_DTO;
+        CreateUserRequest request = getCreateUserRequest();
+        UserDto userDto = getCreatedUserDto();
 
         when(service.create(request)).thenReturn(userDto);
 
@@ -80,8 +88,8 @@ class UserControllerTest {
     @Test
     void update_shouldReturnUpdatedUserDto_whenRequestIsValid() throws Exception {
         long userId = 3L;
-        UpdateUserRequest request = TestConstant.UPDATE_USER_REQUEST;
-        UserDto userDto = TestConstant.UPDATE_USER_DTO;
+        UpdateUserRequest request = getUpdateUserRequest();
+        UserDto userDto = getUpdateUserDto();
 
         when(service.update(userId, request)).thenReturn(userDto);
 
@@ -95,8 +103,8 @@ class UserControllerTest {
     @Test
     void updateStatus_shouldReturnUpdatedUserDto_whenRequestIsValid() throws Exception {
         long userId = 3L;
-        UpdateStatusRequest request = TestConstant.STATUS_REQUEST;
-        UserDto userDto = TestConstant.UPDATE_USER_DTO_INACTIVE;
+        UpdateStatusRequest request = getStatusRequest();
+        UserDto userDto = getUpdateUserDtoInactive();
 
         when(service.updateStatus(userId, request.status())).thenReturn(userDto);
 
