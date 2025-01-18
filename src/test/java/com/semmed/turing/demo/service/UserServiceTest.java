@@ -166,13 +166,13 @@ class UserServiceTest {
 
     @Test
     void updateStatus_shouldReturnSuccess() {
-        when(repo.findById(3L)).thenReturn(Optional.of(TestConstant.UPDATE_USER_ENTITY));
-        when(repo.updateField(3L, UserField.STATUS, UserStatus.INACTIVE.name()))
-                .thenReturn(TestConstant.UPDATE_USER_ENTITY_INACTIVE);
+        when(repo.findById(3L)).thenReturn(Optional.of(TestConstant.getUser3()));
+        when(repo.save(TestConstant.getUser3Inactive())).thenReturn(TestConstant.getUser3Inactive());
 
         UserDto result = userService.updateStatus(3L, UserStatus.INACTIVE);
+
         assertNotNull(result);
-        assertEquals(TestConstant.UPDATE_USER_DTO_INACTIVE, result);
+        assertEquals(TestConstant.getUser3DtoInactive(), result);
     }
 
     @Test
@@ -186,7 +186,7 @@ class UserServiceTest {
 
     @Test
     void updateStatus_shouldThrowInvalidInputException_whenStatusIsTheSame() {
-        when(repo.findById(3L)).thenReturn(Optional.of(TestConstant.UPDATE_USER_ENTITY));
+        when(repo.findById(3L)).thenReturn(Optional.of(TestConstant.USER_3));
 
         InvalidInputException ex =
                 assertThrows(InvalidInputException.class, () -> userService.updateStatus(3L, UserStatus.ACTIVE));

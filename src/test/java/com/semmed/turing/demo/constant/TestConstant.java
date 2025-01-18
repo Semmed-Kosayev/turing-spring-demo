@@ -26,13 +26,7 @@ public interface TestConstant {
             .status(UserStatus.ACTIVE)
             .build();
 
-    UserEntity USER_3 = UserEntity.builder()
-            .id(3L)
-            .username("Aysun Memmedova")
-            .email("aysunmemmedova123@gmail.com")
-            .password("456aysova")
-            .status(UserStatus.ACTIVE)
-            .build();
+    UserEntity USER_3 = getUser3();
 
     UserDto USER_DTO_1 = new UserDto(
             1L,
@@ -101,6 +95,41 @@ public interface TestConstant {
             "aysunmemmedova@gmail.com",
             UserStatus.INACTIVE
     );
+
+    UserEntity USER_3_INACTIVE = getUser3Inactive();
+
+    static UserEntity getUser3Inactive() {
+        UserEntity user = new UserEntity();
+        user.setId(3L);
+        user.setUsername("Aysun Memmedova");
+        user.setEmail("aysunmemmedova123@gmail.com");
+        user.setPassword("456aysova");
+        user.setStatus(UserStatus.INACTIVE);
+
+        return user;
+    }
+
+    UserDto USER_DTO_3_INACTIVE = getUser3DtoInactive();
+
+    static UserDto getUser3DtoInactive() {
+        return new UserDto(
+                3L,
+                "Aysun Memmedova",
+                "aysunmemmedova123@gmail.com",
+                UserStatus.INACTIVE);
+    }
+
+    static UserEntity getUser3() {
+        UserEntity user = new UserEntity();
+
+        user.setId(3L);
+        user.setUsername("Aysun Memmedova");
+        user.setEmail("aysunmemmedova123@gmail.com");
+        user.setPassword("456aysova");
+        user.setStatus(UserStatus.ACTIVE);
+
+        return user;
+    }
 
     UpdateStatusRequest STATUS_REQUEST = new UpdateStatusRequest(UserStatus.INACTIVE);
 }
