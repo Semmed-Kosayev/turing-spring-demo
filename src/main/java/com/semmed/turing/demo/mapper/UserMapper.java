@@ -4,37 +4,19 @@ import com.semmed.turing.demo.domain.entity.UserEntity;
 import com.semmed.turing.demo.model.dto.CreateUserRequest;
 import com.semmed.turing.demo.model.dto.UpdateUserRequest;
 import com.semmed.turing.demo.model.dto.UserDto;
-import com.semmed.turing.demo.model.enums.UserStatus;
-import lombok.NonNull;
-import org.springframework.stereotype.Component;
+import jakarta.validation.constraints.NotNull;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Component
-public class UserMapper {
+@Mapper(componentModel = "spring")
+public interface UserMapper {
 
-    public UserDto toUserDto(@NonNull UserEntity user) {
-        return new UserDto(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getStatus()
-        );
-    }
+    UserDto toUserDto(@NotNull UserEntity user);
 
-    public UserEntity toEntity(@NonNull CreateUserRequest request) {
-        return UserEntity.builder()
-                .username(request.username())
-                .email(request.email())
-                .password(request.password())
-                .status(UserStatus.ACTIVE)
-                .build();
-    }
+    @Mapping(target = "id", ignore = true) // Ensure ID is ignored for creation
+    @Mapping(target = "status", constant = "ACTIVE") // Set default status
+    UserEntity toEntity(@NotNull CreateUserRequest request);
 
-    public UserEntity toEntity(@NonNull UpdateUserRequest request) {
-        return UserEntity.builder()
-                .username(request.username())
-                .email(request.email())
-                .password(request.password())
-                .status(request.status())
-                .build();
-    }
+    @Mapping(target = "id", ignore = true) // Assume ID is not updated
+    UserEntity toEntity(@NotNull UpdateUserRequest request);
 }

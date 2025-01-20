@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +25,12 @@ public class UserService {
     private final UserMapper mapper;
 
     public List<UserDto> findAll() {
-        return repo.findAll().stream()
-                .map(mapper::toUserDto)
-                .toList();
+        List<UserEntity> all = repo.findAll();
+        Stream<UserEntity> stream = all.stream();
+        Function<UserEntity, UserDto> toUserDto = mapper::toUserDto;
+        Stream<UserDto> userDtoStream = stream.map(toUserDto);
+        List<UserDto> list = userDtoStream.toList();
+        return list;
     }
 
     public UserDto findById(final long id) {
