@@ -12,6 +12,7 @@ import com.semmed.turing.demo.model.dto.UserDto;
 import com.semmed.turing.demo.model.enums.UserStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -35,7 +36,7 @@ class UserServiceTest {
     private UserRepository repo;
 
     @Spy
-    private UserMapper mapper;
+    private UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
     @InjectMocks
     private UserService userService;
