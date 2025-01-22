@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002_load-data-users-table
+      author: Elvin Taghizade
+      changes:
+        - loadData:
+            encoding: UTF-8
+            file: db/data/users.csv
+            separator: ;
+            tableName: user_entity
